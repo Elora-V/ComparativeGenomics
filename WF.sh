@@ -17,4 +17,7 @@ if [ ! -d Blast_db ]
 then mkdir Blast_db
 fi
 
+chmod +x ./blast_db_creation.sh
 ./blast_db_creation.sh
+
+
