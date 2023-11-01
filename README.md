@@ -16,6 +16,6 @@ scp cheminLocal ubuntu@134.158.248.133:ComparativeGenomics/
 - Execution script :
 
 ```bash
-sh main.sh
+sh main.sh -p prot.tar -b blastout2022.tar.gz
  ```
   
