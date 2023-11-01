@@ -10,8 +10,7 @@
 
 ##### PARAMETERS #####
 
-path_to_db=./Blast_db/
-path_to_prot_file=./prot/
+. ./config.sh
 
 ##### END PARAMETERS #
 
@@ -24,7 +23,7 @@ fi
 for species in $path_to_prot_file*
 do
         temp=${species/*\//}
-        ./ncbi-blast-2.10.1+/bin/makeblastdb -in $path_to_prot_file$temp -dbtype "prot" -out $path_to_db${temp/.fa*/}
+        ./ncbi-blast-2.14.1+/bin/makeblastdb -in $path_to_prot_file$temp -dbtype "prot" -out $path_to_db${temp/.fa*/}
         echo ""
 done
 
