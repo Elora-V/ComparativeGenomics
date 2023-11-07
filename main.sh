@@ -53,8 +53,8 @@ echo ""
 
 if [ ! -f ncbi-blast-2.14.1+-x64-linux.tar.gz ]
 then
-	wget  https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.14.1+-x64-linux.tar.gz
-	tar -zxvf ncbi-blast-2.14.1+-x64-linux.tar.gz
+	wget  https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.15.0+-x64-linux.tar.gz
+	tar -zxvf ncbi-blast-2.15.0+-x64-linux.tar.gz
 else echo "already done"
 fi
 
@@ -133,5 +133,6 @@ then mkdir $path_to_result
 fi
 
 if [ ! -f "bestHits.json" ] 
-then python3 modules/Path_Blast.py -d $path_to_blast_out -j "besthits.json" $coverage $identity $evalue
+then 
+	python3 modules/Path_Blast.py -d $path_to_blast_out -j "bestHits.json" $coverage $identity $evalue
 fi
