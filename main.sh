@@ -6,15 +6,35 @@
 
 . ./config.sh
 
-fileprot="prot.tar" # default value
+# default value
 
-while getopts p:b: flag
+fileprot="prot.tar"
+
+while getopts p:b:e:c:i flag
 do
     case "${flag}" in
     	p) fileprot=${OPTARG};;
-        b) resultBlast=${OPTARG};;       
+        b) resultBlast=${OPTARG};; 
+		e) evalue=${OPTARG};;  
+		c) coverage=${OPTARG};;  
+		i) identity=${OPTARG};;        
     esac
 done
+
+if [ -z "$evalue" ]
+then evalue=""
+else evalue="-e '$evalue'"
+fi
+
+if [ -z "$coverage" ]
+then coverage=""
+else coverage="-cov '$coverage'"
+fi
+
+if [ -z "$identity" ]
+then identity=""
+else identity="-id '$identity'"
+fi
 
 ##### END PARAMETERS #
 
@@ -75,6 +95,7 @@ fi
 # make database and blast with ncbi
 if [ ! -z $resultBlast ]
 then 
+	echo "Get output blast"
 	# get result directly in directory
 	if [ ! -d $path_to_blast_out ]
 	then mkdir $path_to_blast_out 
@@ -91,6 +112,7 @@ then
 	esac
 
 else
+	echo " Execution of blast"
 	# execution script
 	chmod +x ./modules/blast_db_creation.sh
 	chmod +x ./modules/launch_blast.sh
@@ -98,3 +120,18 @@ else
 	./modules/launch_blast.sh
 fi
 
+### Blast output parser ###
+
+echo ""
+echo "#########################################################"  
+echo "Blast output parser"
+echo "#########################################################"
+echo ""
+
+if [ ! -d $path_to_result ]
+then mkdir $path_to_result
+fi
+
+if [ ! -f "bestHits.json" ] 
+then python3 modules/Path_Blast.py -d $path_to_blast_out -j "besthits.json" $coverage $identity $evalue
+fi

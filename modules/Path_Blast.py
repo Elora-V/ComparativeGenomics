@@ -1,15 +1,22 @@
 import os
 import glob
 import argparse
+import json
 
 parser=argparse.ArgumentParser()
 parser.add_argument("-d","--dirBlast",help="chemin vers les fichiers output blast",type=str,required=True)
+parser.add_argument("-e","--evalue",help="evalue max",type=float,required=False)
+parser.add_argument("-cov","--coverage",help="coverage min",type=float,required=False)
+parser.add_argument("-id","--identity",help="identity min",type=float,required=False)
+parser.add_argument("-j","--json",help="name json output",type=str,required=True)
+
 args=parser.parse_args()
 
 
 
 genomhit={}
 
+# on parcours tous les outputs de blast
 
 for blast in glob.iglob(args.dirBlast+"*"):
 
@@ -58,14 +65,26 @@ for blast in glob.iglob(args.dirBlast+"*"):
                     evalue=float(dataline[11])
                     cov=float(dataline[3])/float(dataline[13]) *100 # coverage : longueur alignement sur longueur query
                     
-                    # ajout du best hit
-                    genomhit[queryGenom][query].append(subject)
-                    
+                    # applications filtres
+                    add= True # on dit qu'on va ajouter
+                    # on regarde si une des conditions n'est pas validé
+                    if (args.identity is not None and identity<args.identity) or \
+                    (args.evalue is not None and evalue > args.evalue) or \
+                    (args.coverage is not None and cov<args.coverage)  :
+                        add=False
+                 
 
-        print(genomhit['Escherichia_coli_umn026']['Eco13_4407'])
+                    # ajout du best hit
+                    if add == True :
+                        genomhit[queryGenom][query].append(subject)
+                    else :
+                        genomhit[queryGenom][query].append(None)
+                    
 
         file.close 
 
+    
 
-
-    break
+    # on ecrit le dictionnaire dans un fichier json
+    with open( args.json , 'w') as fichier_json:
+        json.dump(genomhit, fichier_json)
