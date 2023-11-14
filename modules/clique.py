@@ -37,10 +37,10 @@ for q1 in queries1 : # pour chaque gène/query du genome 1
                 if listHit!=hit1 : # si la liste des hits est différente de celle obtenu dans le genome 1
                     flag=False # arrete
 
-    # on a verifié pour chaque besthit si csa liste de best hit est pareil
-    # si flag tjrs vrai : clique
-    if flag==True:
-        listClique.append(hit1) # ajoute la clique
+        # on a verifié pour chaque besthit si csa liste de best hit est pareil
+        # si flag tjrs vrai : clique
+        if flag==True:
+            listClique.append(hit1) # ajoute la clique
 
 print(len(listClique))
             

@@ -79,6 +79,8 @@ then
         mv ${fileprot}/* $path_to_prot_file
         ;;
 	esac
+else
+	echo "already done"
 fi
 
 ### Blast ###
@@ -99,17 +101,18 @@ then
 	# get result directly in directory
 	if [ ! -d $path_to_blast_out ]
 	then mkdir $path_to_blast_out 
+	
+	
+		case $resultBlast in
+			*.tar|*.tar.gz)
+				# dezip
+				tar -xvf $resultBlast -C $path_to_blast_out ;;
+			*)
+				# move
+				mv $resultBlast $path_to_blast_out ;;
+		esac
+	else echo "already done"
 	fi
-	
-	
-	case $resultBlast in
-    	*.tar|*.tar.gz)
-			# dezip
-			tar -xvf $resultBlast -C $path_to_blast_out ;;
-		*)
-			# move
-			mv $resultBlast $path_to_blast_out ;;
-	esac
 
 else
 	echo " Execution of blast"
@@ -122,17 +125,25 @@ fi
 
 ### Blast output parser ###
 
-echo ""
-echo "#########################################################"  
-echo "Blast output parser"
-echo "#########################################################"
-echo ""
-
 if [ ! -d $path_to_result ]
 then mkdir $path_to_result
 fi
 
-if [ ! -f "bestHits.json" ] 
+if [ ! -f "bestHits2.json" ] 
 then 
-	python3 modules/Path_Blast.py -d $path_to_blast_out -j "bestHits.json" $coverage $identity $evalue
+
+	echo ""
+	echo "#########################################################"  
+	echo "Blast output parser"
+	echo "#########################################################"
+	echo ""
+	python3 modules/Path_Blast.py -d $path_to_blast_out -j bestHits2.json #-e 1e-3 -cov 50 -id 50
+
+	echo ""
+	echo "#########################################################"  
+	echo "Recherche core genome"
+	echo "#########################################################"
+	echo ""
+	python3 modules/clique.py -f bestHits2.json
+
 fi

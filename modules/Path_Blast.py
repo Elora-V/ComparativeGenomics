@@ -17,8 +17,9 @@ args=parser.parse_args()
 genomhit={}
 
 # on parcours tous les outputs de blast
+files=sorted(glob.glob(args.dirBlast+"/*"))
 
-for blast in glob.iglob(args.dirBlast+"*"):
+for blast in files:
 
     # recupérer les noms des genomes query et subject
     filename=os.path.basename(blast)
@@ -31,7 +32,6 @@ for blast in glob.iglob(args.dirBlast+"*"):
         genomhit[queryGenom]={} # on crée un dico associé au query genome
 
     
-        
 
     # ouverture fichier
     with open(blast) as file : 
@@ -64,6 +64,7 @@ for blast in glob.iglob(args.dirBlast+"*"):
                     identity= float(dataline[2])
                     evalue=float(dataline[11])
                     cov=float(dataline[3])/float(dataline[13]) *100 # coverage : longueur alignement sur longueur query
+
                     
                     # applications filtres
                     add= True # on dit qu'on va ajouter
@@ -72,7 +73,7 @@ for blast in glob.iglob(args.dirBlast+"*"):
                     (args.evalue is not None and evalue > args.evalue) or \
                     (args.coverage is not None and cov<args.coverage)  :
                         add=False
-                 
+
 
                     # ajout du best hit
                     if add == True :
