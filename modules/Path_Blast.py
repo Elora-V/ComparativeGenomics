@@ -91,13 +91,13 @@ for blast in files:
                         genomhit[query].append(None)
                     
 
-        file.close 
+        #file.close()
     
     if blast == files[len(files)-1]: # si c'était le dernier fichier, faut ajouter
         genomhit_all[queryGenom]=genomhit 
         print("Dictionnaire pour genome "+queryGenom)
     
 
-    # on ecrit le dictionnaire dans un fichier json
-    with open( args.json , 'w') as fichier_json:
-        json.dump(genomhit_all, fichier_json)
+# on ecrit le dictionnaire dans un fichier json
+with open( args.json , 'w') as fichier_json:
+    json.dump(genomhit_all, fichier_json)
