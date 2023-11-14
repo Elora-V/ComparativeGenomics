@@ -51,7 +51,7 @@ echo "Telechargement Blast"
 echo "#########################################################"
 echo ""
 
-if [ ! -f ncbi-blast-2.14.1+-x64-linux.tar.gz ]
+if [ ! -f ncbi-blast-2.15.0+-x64-linux.tar.gz ]
 then
 	wget  https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.15.0+-x64-linux.tar.gz
 	tar -zxvf ncbi-blast-2.15.0+-x64-linux.tar.gz
