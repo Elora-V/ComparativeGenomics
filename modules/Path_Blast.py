@@ -98,6 +98,7 @@ for blast in files:
         print("Dictionnaire pour genome "+queryGenom)
     
 
+
 # on ecrit le dictionnaire dans un fichier json
 with open( args.json , 'w') as fichier_json:
     json.dump(genomhit_all, fichier_json)

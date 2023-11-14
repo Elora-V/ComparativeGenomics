@@ -5,6 +5,10 @@
 ##### PARAMETERS #####
 
 . ./config.sh
+evalue="1e-10"
+id="30"
+cov="50"
+
 
 # default value
 
@@ -15,26 +19,27 @@ do
     case "${flag}" in
     	p) fileprot=${OPTARG};;
         b) resultBlast=${OPTARG};; 
-		e) evalue=${OPTARG};;  
-		c) coverage=${OPTARG};;  
-		i) identity=${OPTARG};;        
+		#e) evalue=${OPTARG};;  
+		#c) coverage=${OPTARG};;  
+		#i) identity=${OPTARG};;        
     esac
 done
 
-if [ -z "$evalue" ]
-then evalue=""
-else evalue="-e '$evalue'"
-fi
 
-if [ -z "$coverage" ]
-then coverage=""
-else coverage="-cov '$coverage'"
-fi
+# if [ -z "$evalue" ]
+# then evalue=""
+# else evalue="-e '$evalue'"
+# fi
 
-if [ -z "$identity" ]
-then identity=""
-else identity="-id '$identity'"
-fi
+# if [ -z "$coverage" ]
+# then coverage=""
+# else coverage="-cov '$coverage'"
+# fi
+
+# if [ -z "$identity" ]
+# then identity=""
+# else identity="-id '$identity'"
+# fi
 
 ##### END PARAMETERS #
 
@@ -129,7 +134,7 @@ if [ ! -d $path_to_result ]
 then mkdir $path_to_result
 fi
 
-if [ ! -f "bestHits3.json" ] 
+if [ ! -f $outputDico ] 
 then 
 
 	echo ""
@@ -137,13 +142,13 @@ then
 	echo "Blast output parser"
 	echo "#########################################################"
 	echo ""
-	python3 modules/Path_Blast.py -d $path_to_blast_out -j bestHits3.json -e 1e-3 -cov 50 -id 50
+	python3 modules/Path_Blast.py -d $path_to_blast_out -j $outputDico -e $evalue -cov $cov -id $id
 
 	echo ""
 	echo "#########################################################"  
 	echo "Recherche core genome"
 	echo "#########################################################"
 	echo ""
-	python3 modules/clique.py -f bestHits3.json
+	python3 modules/clique.py -f $outputDico
 
 fi
