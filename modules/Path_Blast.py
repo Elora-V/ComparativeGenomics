@@ -33,6 +33,7 @@ for blast in files:
     # ajout de la clé du genome query
     if newqueryGenom != queryGenom  and queryGenom != "": 
         genomhit_all[queryGenom]=genomhit # ajoute le dico de genom d'avant
+        print("Dictionnaire pour genome "+queryGenom)
         genomhit={} # le temporaire
     elif queryGenom == "" :
         genomhit_all[newqueryGenom]={} # le grand dico
@@ -94,6 +95,7 @@ for blast in files:
     
     if blast == files[len(files)-1]: # si c'était le dernier fichier, faut ajouter
         genomhit_all[queryGenom]=genomhit 
+        print("Dictionnaire pour genome "+queryGenom)
     
 
     # on ecrit le dictionnaire dans un fichier json
