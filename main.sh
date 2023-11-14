@@ -129,7 +129,7 @@ if [ ! -d $path_to_result ]
 then mkdir $path_to_result
 fi
 
-if [ ! -f "bestHits2.json" ] 
+if [ ! -f "bestHits3.json" ] 
 then 
 
 	echo ""
@@ -137,13 +137,13 @@ then
 	echo "Blast output parser"
 	echo "#########################################################"
 	echo ""
-	python3 modules/Path_Blast.py -d $path_to_blast_out -j bestHits2.json #-e 1e-3 -cov 50 -id 50
+	python3 modules/Path_Blast.py -d $path_to_blast_out -j bestHits3.json -e 1e-3 -cov 50 -id 50
 
 	echo ""
 	echo "#########################################################"  
 	echo "Recherche core genome"
 	echo "#########################################################"
 	echo ""
-	python3 modules/clique.py -f bestHits2.json
+	python3 modules/clique.py -f bestHits3.json
 
 fi

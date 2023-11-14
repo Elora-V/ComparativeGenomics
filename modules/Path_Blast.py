@@ -14,24 +14,32 @@ args=parser.parse_args()
 
 
 
-genomhit={}
+genomhit_all={}
 
 # on parcours tous les outputs de blast
 files=sorted(glob.glob(args.dirBlast+"/*"))
+
+queryGenom=""
+genomhit={}
 
 for blast in files:
 
     # recupérer les noms des genomes query et subject
     filename=os.path.basename(blast)
     listGenom=filename.strip(".bl").split("-vs-")
-    queryGenom=listGenom[0]
+    newqueryGenom=listGenom[0]
     subjectGenom=listGenom[1]
 
     # ajout de la clé du genome query
-    if queryGenom not in genomhit.keys() : # si c'est la première fois qu'on a ce genome en query
-        genomhit[queryGenom]={} # on crée un dico associé au query genome
-
+    if newqueryGenom != queryGenom  and queryGenom != "": 
+        genomhit_all[queryGenom]=genomhit # ajoute le dico de genom d'avant
+        genomhit={} # le temporaire
+    elif queryGenom == "" :
+        genomhit_all[newqueryGenom]={} # le grand dico
+        genomhit={} # le temporaire
     
+
+    queryGenom=newqueryGenom
 
     # ouverture fichier
     with open(blast) as file : 
@@ -48,12 +56,12 @@ for blast in files:
                     # on recupère le nom de la sequence query
                     query=line.strip("# Query:").strip()
                     # ajout clé query si necessaire
-                    if query not in genomhit[queryGenom].keys():
-                        genomhit[queryGenom][query]=[] # on crée une liste associé à la sequence query : on aura les best hits pour chaque genome
+                    if query not in genomhit.keys():
+                        genomhit[query]=[] # on crée une liste associé à la sequence query : on aura les best hits pour chaque genome
 
                 if l == 4 and line.startswith("# 0 hits") :
                     # si on a pas de hit 
-                     genomhit[queryGenom][query].append(None) # on ajoute un none
+                     genomhit[query].append(None) # on ajoute un none
 
 
                 elif l == 6 : # premier hit s'il y en a un
@@ -77,15 +85,17 @@ for blast in files:
 
                     # ajout du best hit
                     if add == True :
-                        genomhit[queryGenom][query].append(subject)
+                        genomhit[query].append(subject)
                     else :
-                        genomhit[queryGenom][query].append(None)
+                        genomhit[query].append(None)
                     
 
         file.close 
-
+    
+    if blast == files[len(files)-1]: # si c'était le dernier fichier, faut ajouter
+        genomhit_all[queryGenom]=genomhit 
     
 
     # on ecrit le dictionnaire dans un fichier json
     with open( args.json , 'w') as fichier_json:
-        json.dump(genomhit, fichier_json)
+        json.dump(genomhit_all, fichier_json)
