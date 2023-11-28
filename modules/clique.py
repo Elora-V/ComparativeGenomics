@@ -17,10 +17,9 @@ listClique=[]
 genom1=list(genomhit.keys())[1]
 queries1=genomhit[genom1].keys()
 
+
 for q1 in queries1 : # pour chaque gène/query du genome 1
-
     hit1=genomhit[genom1][q1] # les best hit du genome 1 query q
-
     if None not in hit1: # si il manque 1 best hit : pas clique
     # donc fait que si pas none la verification des comparaisons
 

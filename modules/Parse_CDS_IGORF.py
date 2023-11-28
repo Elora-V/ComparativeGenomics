@@ -75,13 +75,14 @@ for blast in files:
                     dataline=line.split("\t")
                     subject=dataline[1]
                     identity= float(dataline[2])
-                    evalue=float(dataline[11])
-                    cov=float(dataline[3])/float(dataline[13]) *100 # coverage : longueur alignement sur longueur query
+                    evalue=float(dataline[10])
+                    cov=float(dataline[3])/float(dataline[12]) *100 # coverage : longueur alignement sur longueur query
 
                     isHitCDS=len(subject.split('_'))<=3
                     # applications filtres
                     add= True # on dit qu'on va ajouter
                     # on regarde si une des conditions n'est pas validé
+                    
                     if isCDS and isHitCDS : # si cds
 
                         if (args.identitycds is not None and identity<args.identitycds) or \
@@ -100,13 +101,13 @@ for blast in files:
                     if add == True :
                         if isCDS:
                             genomhit_cds[queryGenom][query].append(subject)
-                        else :
+                        elif not isCDS:
                             genomhit_igorf[queryGenom][query].append(subject)
 
                     else :
                         if isCDS:
                             genomhit_cds[queryGenom][query].append(None)
-                        else :
+                        elif not isCDS:
                             genomhit_igorf[queryGenom][query].append(None)
                     
 
