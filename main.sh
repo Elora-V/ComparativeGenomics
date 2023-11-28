@@ -158,4 +158,12 @@ if [ ! -f $outputIgorf ]
 	echo ""
 	python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf
 
+	echo ""
+	echo "#########################################################"  
+	echo "Recherche core genome"
+	echo "#########################################################"
+	echo ""
+	python3 modules/clique.py -f $outputCDS
+	python3 modules/clique.py -f $outputIgorf
+
 fi

@@ -82,7 +82,7 @@ for blast in files:
                     # applications filtres
                     add= True # on dit qu'on va ajouter
                     # on regarde si une des conditions n'est pas validé
-                    
+
                     if isCDS and isHitCDS : # si cds
 
                         if (args.identitycds is not None and identity<args.identitycds) or \
@@ -95,19 +95,21 @@ for blast in files:
                         (args.evalueigorf is not None and evalue > args.evalueigorf) or \
                         (args.coverageigorf is not None and cov<args.coverageigorf)  :
                             add=False
+                    else : 
+                        add=False # si pas meme type : pas ajout
 
 
                     # ajout du best hit
                     if add == True :
                         if isCDS:
                             genomhit_cds[queryGenom][query].append(subject)
-                        elif not isCDS:
+                        else:
                             genomhit_igorf[queryGenom][query].append(subject)
 
                     else :
                         if isCDS:
                             genomhit_cds[queryGenom][query].append(None)
-                        elif not isCDS:
+                        else:
                             genomhit_igorf[queryGenom][query].append(None)
                     
 
