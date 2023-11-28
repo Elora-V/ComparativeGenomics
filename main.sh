@@ -130,25 +130,32 @@ fi
 
 ### Blast output parser ###
 
-if [ ! -d $path_to_result ]
-then mkdir $path_to_result
-fi
 
-if [ ! -f $outputDico ] 
-then 
+# if [ ! -f $outputDico ] 
+# then 
 
+# 	echo ""
+# 	echo "#########################################################"  
+# 	echo "Blast output parser"
+# 	echo "#########################################################"
+# 	echo ""
+# 	python3 modules/Path_Blast.py -d $path_to_blast_out -j $outputDico -e $evalue -cov $cov -id $id
+
+# 	echo ""
+# 	echo "#########################################################"  
+# 	echo "Recherche core genome"
+# 	echo "#########################################################"
+# 	echo ""
+# 	python3 modules/clique.py -f $outputDico
+
+# fi
+
+if [ ! -f $outputIgorf ] 
 	echo ""
 	echo "#########################################################"  
 	echo "Blast output parser"
 	echo "#########################################################"
 	echo ""
-	python3 modules/Path_Blast.py -d $path_to_blast_out -j $outputDico -e $evalue -cov $cov -id $id
-
-	echo ""
-	echo "#########################################################"  
-	echo "Recherche core genome"
-	echo "#########################################################"
-	echo ""
-	python3 modules/clique.py -f $outputDico
+	python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf
 
 fi
