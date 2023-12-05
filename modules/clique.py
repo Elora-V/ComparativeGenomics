@@ -3,6 +3,8 @@ import argparse
 
 parser=argparse.ArgumentParser()
 parser.add_argument("-f","--filejson",help="chemin vers le fichier dictionnaire best hits",type=str,required=True)
+parser.add_argument("-o","--fileoutput",help="chemin vers le fichier indiquant taille core genome",type=str,required=True)
+
 args=parser.parse_args()
 
 
@@ -44,7 +46,8 @@ for q1 in queries1 : # pour chaque gène/query du genome 1
 print(len(listClique))
             
 
-
+with open(args.fileoutput,'a') as file :
+    file.write("\t"+str(len(listClique)) +"\n")
 
 
 

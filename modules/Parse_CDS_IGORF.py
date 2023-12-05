@@ -13,6 +13,9 @@ parser.add_argument("-covigorf","--coverageigorf",help="coverage min",type=float
 parser.add_argument("-idigorf","--identityigorf",help="identity min",type=float,required=False)
 parser.add_argument("-jcds","--jsoncds",help="name json output",type=str,required=True)
 parser.add_argument("-jigorf","--jsonigorf",help="name json output",type=str,required=True)
+parser.add_argument("-ocds","--fileoutputcds",help="chemin vers le fichier indiquant taille core genome cds",type=str,required=True)
+parser.add_argument("-oigorf","--fileoutputigorf",help="chemin vers le fichier indiquant taille core genome igorf",type=str,required=True)
+
 
 args=parser.parse_args()
 
@@ -123,3 +126,23 @@ with open( args.jsoncds , 'w') as fichier_json:
     json.dump(genomhit_cds, fichier_json)
 with open( args.jsonigorf , 'w') as fichier_json:
     json.dump(genomhit_igorf, fichier_json)
+
+# cds file
+
+if not os.path.isfile(args.fileoutputcds):
+    with open(args.fileoutputcds, 'w') as file:
+        file.write("eval\tcov\tid\tcoreGenome\n")
+
+  
+with open(args.fileoutputcds, 'a') as file:
+    file.write(str(args.evaluecds)+"\t"+str(args.coveragecds)+"\t"+str(args.identitycds))
+
+# igorf file
+
+if not os.path.isfile(args.fileoutputigorf):
+    with open(args.fileoutputigorf, 'w') as file:
+        file.write("eval\tcov\tid\tcoreGenome\n")
+
+with open(args.fileoutputigorf, 'a') as file:
+    file.write(str(args.evalueigorf)+"\t"+str(args.coverageigorf)+"\t"+str(args.identityigorf))
+

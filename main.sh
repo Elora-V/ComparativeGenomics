@@ -150,22 +150,25 @@ fi
 
 # fi
 
-if [ ! -f $outputIgorf ] 
+if [ ! -f "$outputCDS" ] || [ ! -f "$outputIgorf" ]
 then
-	echo ""
-	echo "#########################################################"  
-	echo "Blast output parser"
-	echo "#########################################################"
-	echo ""
-	python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf \
-	-ecds 1e-5 -idcds 30 -covcds 70 -eigorf 1e-5 -idigorf 30 -covigorf 70
-
-	echo ""
-	echo "#########################################################"  
-	echo "Recherche core genome"
-	echo "#########################################################"
-	echo ""
-	python3 modules/clique.py -f $outputCDS
-	python3 modules/clique.py -f $outputIgorf
-
+echo ""
+echo "#########################################################"  
+echo "Blast output parser"
+echo "#########################################################"
+echo ""
+python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf \
+-ecds 1e-5 -idcds 30 -covcds 70 -eigorf 1e-5 -idigorf 30 -covigorf 70 -ocds "coreCDS.txt" -oigorf "coreIGORF.txt"
 fi
+
+
+echo ""
+echo "#########################################################"  
+echo "Recherche core genome"
+echo "#########################################################"
+echo ""
+python3 modules/clique.py -f $outputCDS -o "coreCDS.txt"
+python3 modules/clique.py -f $outputIgorf -o "coreIGORF.txt"
+rm $outputCDS
+rm $outputIgorf 
+
