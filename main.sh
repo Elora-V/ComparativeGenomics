@@ -128,7 +128,9 @@ else
 	./modules/launch_blast.sh
 fi
 
-### Blast output parser ###
+
+########################################################################################
+#### Blast output parser 
 
 
 # if [ ! -f $outputDico ] 
@@ -139,7 +141,7 @@ fi
 # 	echo "Blast output parser"
 # 	echo "#########################################################"
 # 	echo ""
-# 	python3 modules/Path_Blast.py -d $path_to_blast_out -j $outputDico -e $evalue -cov $cov -id $id
+# 	python3 modules/Path_Blast.py -d $path_to_blast_out -j $outputDico -e $evalue -cov $cov -id $id 
 
 # 	echo ""
 # 	echo "#########################################################"  
@@ -150,25 +152,34 @@ fi
 
 # fi
 
-if [ ! -f "$outputCDS" ] || [ ! -f "$outputIgorf" ]
-then
-echo ""
-echo "#########################################################"  
-echo "Blast output parser"
-echo "#########################################################"
-echo ""
-python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf \
--ecds 1e-5 -idcds 30 -covcds 70 -eigorf 1e-5 -idigorf 30 -covigorf 70 -ocds "coreCDS.txt" -oigorf "coreIGORF.txt"
-fi
 
+########################################################################################
+#### Taille core genome en fonction id ou cov (en fonction code)
 
-echo ""
-echo "#########################################################"  
-echo "Recherche core genome"
-echo "#########################################################"
-echo ""
-python3 modules/clique.py -f $outputCDS -o "coreCDS.txt"
-python3 modules/clique.py -f $outputIgorf -o "coreIGORF.txt"
-rm $outputCDS
-rm $outputIgorf 
+i=0
+while [ $i -le 100 ] # le : less or equal
+do 
+    echo ""
+    echo "#########################################################"
+    echo "Blast output parser"
+    echo "#########################################################"
+    echo ""
+    
+    if [ ! -f "$outputCDS" ] || [ ! -f "$outputIgorf" ]; then
+        python3 modules/Parse_CDS_IGORF.py -d Blast_output_igorf -jcds $outputCDS -jigorf $outputIgorf \
+        -ecds 1e-5 -idcds $i -covcds 70 -eigorf 1e-5 -idigorf $i -covigorf 70 -ocds "coreCDS.txt" -oigorf "coreIGORF.txt"
+    fi
 
+    echo ""
+    echo "#########################################################"
+    echo "Recherche core genome"
+    echo "#########################################################"
+    echo ""
+    
+    python3 modules/clique.py -f $outputCDS -o "coreCDS.txt"
+    python3 modules/clique.py -f $outputIgorf -o "coreIGORF.txt"
+    rm $outputCDS
+    rm $outputIgorf
+
+	i=$((i + 10))
+done
